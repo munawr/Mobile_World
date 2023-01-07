@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_world/Models/LoginModel.dart';
+import 'package:mobile_world/Services/LoginService.dart';
 import 'homePage.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
-
+  LoginPage({super.key});
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,24 +25,26 @@ class LoginPage extends StatelessWidget {
                     child: Image.asset('assets/images/logo.jpg')),
               ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
+                controller: emailController,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
                     hintText: 'Enter valid email id'),
               ),
             ),
-            const Padding(
+            Padding(
               padding:
-                  EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
+                  EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 10),
               child: TextField(
+                controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Password',
-                    hintText: 'Enter secure password'),
+                    hintText: 'Enter password'),
               ),
             ),
             Container(
@@ -48,9 +53,19 @@ class LoginPage extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.blue, borderRadius: BorderRadius.circular(20)),
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => HomePage()));
+                onPressed: () async {
+                  Login? result = await LoginService().getLogin(
+                      username: emailController.text,
+                      password: passwordController.text);
+
+                  if (result == null) {
+                    var snackBar = const SnackBar(content: Text('invalid'));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  } else {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ));
+                  }
                 },
                 child: const Text(
                   'Login',
