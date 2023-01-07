@@ -36,7 +36,7 @@ class Products {
   String? description;
   int? price;
   double? discountPercentage;
-  double? rating;
+  String? rating;
   int? stock;
   String? brand;
   String? category;
@@ -62,7 +62,7 @@ class Products {
     description = json['description'];
     price = json['price'];
     discountPercentage = json['discountPercentage'];
-    rating = json['rating'];
+    rating = json['rating'].toString();
     stock = json['stock'];
     brand = json['brand'];
     category = json['category'];
